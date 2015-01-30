@@ -22,7 +22,7 @@
 
 import telnetlib
 import re
-import thread
+import threading
 import time
 
 
@@ -62,7 +62,7 @@ class ServerQuery():
         except telnetlib.socket.error:
             raise TS3Error(10, 'Can not open a link on the port or IP')
         output = self.telnet.read_until('TS3', self.Timeout)
-        if output.endswith('TS3') == False:
+        if output.endswith('TS3') is False:
             raise TS3Error(20, 'This is not a Teamspeak 3 Server')
         else:
             return True
@@ -103,7 +103,7 @@ class ServerQuery():
         @type string: str
         @return: A string with escaping of TS3 Query.
         """
-        if type(string) == type(int()):
+        if isinstance(string, int):
             string = str(string)
         else:
             string = string.encode("utf-8")
@@ -137,7 +137,7 @@ class ServerQuery():
         notParsedCMDStatus = "id=" + telnetResponse[1]
         notParsedInfo = telnetResponse[0].split('|')
 
-        if (cmd.endswith("list") == True) or (len(notParsedInfo) > 1):
+        if (cmd.endswith("list") is True) or (len(notParsedInfo) > 1):
             returnInfo = []
             for notParsedInfoLine in notParsedInfo:
                 ParsedInfo = self.TSRegex.findall(notParsedInfoLine)
@@ -180,10 +180,11 @@ class ServerNotification(ServerQuery):
         self.Timeout = 5.0
         self.LastCommand = 0
 
-        self.Lock = thread.allocate_lock()
+        self.Lock = threading.Lock()
         self.RegistedNotifys = []
         self.RegistedEvents = []
-        thread.start_new_thread(self.worker, ())
+        Thre = threading.Thread(target=self.worker)
+        Thre.start()
 
     def worker(self):
         while True:
