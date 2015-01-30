@@ -5,7 +5,7 @@ PyTS3 is a python module with classes to interact with the Teamspeak 3 Query
 Interface.
 
 It is very easy to use
-```````````````````````
+======================
 
 For example to get a list of all virtualservers at the host server.
 ::
@@ -18,7 +18,7 @@ For example to get a list of all virtualservers at the host server.
 	    print server["virtualserver_name"]
 	
 Easy to install
-```````````````
+===============
 
 ::
 
@@ -26,7 +26,7 @@ Easy to install
 	$ python virualservers.py
 
 Links
-`````
+=====
 
 * `source repository <http://bitbucket.org/ChristophHeer/pyts3/>`_
 * `documentation <http://bitbucket.org/ChristophHeer/pyts3/wiki/Home>`_
