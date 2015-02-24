@@ -33,7 +33,7 @@ class TS3Error(Exception):
         self.msg = msg
 
     def __str__(self):
-        return "ID %s (%s)" % (self.code, self.msg)
+        return "ID {0} ({1})".format(self.code, self.msg)
 
 
 class ServerQuery():
@@ -112,7 +112,8 @@ class ServerQuery():
             string = string.replace('|', '\\p')
         return string
 
-    def command(self, cmd, parameter={}, option=[]):
+    # def command(self, cmd, parameter={}, option=[]):
+    def command(self, cmd, *args, **kwargs):
         """
         Send a command with paramters and options to the TS3 Query.
         @param cmd: The command who wants to send.
@@ -124,11 +125,15 @@ class ServerQuery():
         @type option: list
         @return: The answer of the server as tulpe with error code and message.
         """
+        option = args
+        parameter = kwargs
+
         telnetCMD = cmd
         for key in parameter:
-            telnetCMD += " %s=%s" % (key, self.string2escaping(parameter[key]))
+            telnetCMD += " {0}={1}".format(key,
+                                           self.string2escaping(parameter[key]))
         for i in option:
-            telnetCMD += " -%s" % (i)
+            telnetCMD += " -{}".format(i)
         telnetCMD += '\n'
         self.telnet.write(telnetCMD)
 
